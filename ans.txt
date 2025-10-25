@@ -25,8 +25,9 @@
 	// Notice: we can't remove a non-empty file using mkdir
 	rm -r dir1/dir11
 
-  b)
-	rmdir -p  
+  b) if we consider OldFiles as a directory, not a file, we can remove it using the command:
+	rmdir -p  documents
+    Notice: all the subfolders within documents are removed including OldFiles
 	
   c)
 	absolute dir: /home/freecomp/docs/mycv
@@ -41,5 +42,20 @@
    cd /home/gehad
    cd ~
    cd ../../home/gehad 
+   cd
 
 8. ls /usr/bin/w* 
+
+9. 'type' command is used to know the command type; for example: shell built-in command (pwd, cd, ..) or  a user space command (mkdir, rm, cp, ..)
+
+10. using the command:
+	 type $(ls c*)
+    we found that file commnads are: cat, chmod
+
+11. using the command
+	man -k file, read, print
+    we found that the command is cat
+
+12. apropos command is quite equivalent to "man -k" command; it searches the manual page for a command using a keyword related to the command description.
+
+ 
