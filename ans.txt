@@ -1,0 +1,45 @@
+1. Three linux distributions
+	Ubuntu, Red Hat, Debian
+
+2. man command is used for navigating the documentaion of specific command; it provides detailed descriptions more than usual help command; it is based on less, so we can navigate both up and down :)
+
+3. rm is used to delete a regular file or remove a whole directory using the recursive flag. rmdir is used to delete an empty directory; we cann't use it to delete a non-empty folder.
+
+4. 1)
+	cd ~
+	mkdir -p dir1/dir11
+	mkdir dir1/dir12
+	touch dir1/dir11/file1
+
+  2)
+	mkdir docs
+	touch docs/mycv
+
+  3)
+	mkdir documents
+	touch documents/OldFiles	 
+	
+  a)
+	rmdir dir1/dir11
+	rmdir: failed to remove 'dir1/dir11': Directory not empty
+	// Notice: we can't remove a non-empty file using mkdir
+	rm -r dir1/dir11
+
+  b)
+	rmdir -p  
+	
+  c)
+	absolute dir: /home/freecomp/docs/mycv
+	relative dir: ~/docs/mycv
+
+5. cp /etc/passwd ~/mypassword
+
+6. mv mypassword oldpassword
+
+7. cd /usr/bin
+
+   cd /home/gehad
+   cd ~
+   cd ../../home/gehad 
+
+8. ls /usr/bin/w* 
