@@ -1,7 +1,7 @@
 # First sheet answers 🙌
 
 ### Question (1)
-Three linux distributions : Ubuntu, Red Hat, Debian
+Three linux distributions : CentOS, Red Hat, Debian
 
 ### Question (2)
  "man" command is used for navigating the documentation of specific command; it provides detailed descriptions more than usual help command; it is based on less, so we can navigate both up and down :)
