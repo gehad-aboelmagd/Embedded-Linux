@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./waiter
+./waiter.out
 
-./cooker
+./cooker.out
