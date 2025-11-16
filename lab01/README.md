@@ -4,7 +4,7 @@
 
 ### Porblem 🤯
 
-C++ is considered as a superset of the C programming; which means some language-specific features aren't understood by the C compiler. For example, if you try to compile the following application line usign C compiler:
+C++ is considered as a superset of the C programming; which means some language-specific features aren't understood by the C compiler. For example, if you try to compile the following line usign C compiler:
 ```
 auto x = 4;
 error: type defaults to 'int' in declaration of 'x'
