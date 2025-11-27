@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <initializer_list>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -13,41 +12,31 @@ typedef initializer_list<pair<string, int>> actions_t;
 class FileActions
 {
 private:
-    string path;
-    int *fd;
-    // int * &fdref = fd;
+    int *fd = nullptr;
+    int * &fdref;
     actions_t actions;
 public:
-    FileActions(string &path)
+    FileActions(string path): fdref(fd)
     {
-        this->path = path;
         fd = new int;
-        *fd = open(this->path.c_str(), O_RDWR);
+        *fd = open(path.c_str(), O_RDWR);
     }
-    FileActions(const FileActions &obj)
+    FileActions(FileActions &obj): fdref(obj.fd)
     {
-        path = obj.path;
         fd = new int;
-        if(obj.fd != nullptr) // file still opened
-        {
-            *fd = *obj.fd;
-        }
-        else // file has been closed by obj
-        {
-            *fd = open(path.c_str(), O_RDWR);
-        }
+        *fd = *obj.fd;
     }
-    void register_actions(actions_t actions)
+    void registerActions(actions_t actions_)
     {
-        this->actions = actions;
+        actions = actions_;
     }
-    void execute_actions(void)
+    void executeActions()
     {
-        char buff[200] = {'\0'};
+        char buff[200];
 
-        if(*fd < 0)
+        if(*fdref < 0)
         {
-            cout << "problem with the file. Make sure to provide a valid path\n";
+            cout << "Unfortunately, file has already been closed by another object.\n\n";
             return;
         }
         
@@ -58,96 +47,69 @@ public:
                 if(actions.begin()[i].second == 1)
                 {
                     cout << "reading...\n";
-                    read(*fd, buff, sizeof(buff));
-                    cout << buff << std::endl;
+                    lseek(*fdref, 0, SEEK_SET);
+                    read(*fdref, buff, sizeof(buff));
+                    cout << buff << "\n\n";
                 }
             }
             else if(actions.begin()[i].first == "write")
             {
                 if(actions.begin()[i].second == 1)
                 {
-                    cout << "writing...\n";
-                    strcpy(buff, "Have a nice day!");
-                    write(*fd, buff, sizeof(buff));
+                    cout << "writing...\n\n";
+                    strcpy(buff, "\nHave a nice day.");
+                    write(*fdref, buff, strlen(buff));
                 }
             }
             else if(actions.begin()[i].first == "close")
             {
                 if(actions.begin()[i].second == 1)
                 {
-                    cout << "closing...\n";
-                    close(*fd);
-                    *fd = -1;
+                    cout << "closing...\n\n";
+                    close(*fdref);
+                    *fdref = -1;
                 }
             }
             else
             {
-                cout << "Invalid Actions :(\n";
+                cout << "Invalid Action\n";
             }
-
         }
     }
     ~FileActions()
     {
-        close(*fd);
+        // close if not
+        if(*fdref >= 0)
+        {
+            close(*fdref);
+        }
+        // free resources
         delete fd;
         fd = nullptr;
     }
-    int * get_fd_address(void)
-    {
-        return fd;
-    }
-    int get_fd_value(void)
-    {
-        return *fd;
-    }
 };
-
-void func(FileActions obj)
-{
-    cout << obj.get_fd_address() << endl;
-    cout << obj.get_fd_value() << endl;
-    cout << "object deallocated...\n";
-
-    // actions_t actions = {{"read", 1}, {"write", 1}, {"close", 1}};
-    // obj.register_actions(actions);
-    // obj.execute_actions();
-}
-
 
 int main(void)
 {
-    string path = "file.txt";
-    FileActions act1(path);
+    FileActions f1("file.txt");
+    actions_t act1 = 
+    {
+        {"read", 1},
+        {"write", 1},
+        {"read", 1},
+    };
+    f1.registerActions(act1);
+    f1.executeActions();
 
-    /* ********** testing copy constructor ********** */
-    
-    cout << "bofore callign func...\n";
-    cout << act1.get_fd_address() << endl;
-    cout << act1.get_fd_value() << endl << endl;
+    FileActions f2 = f1;
+    actions_t act2 = 
+    {
+        {"close", 1},
+    };
+    f2.registerActions(act2);
+    f2.executeActions();
 
-    cout << "callign func...\n";
-    func(act1);
-    cout << endl;
-
-    cout << "after callign func...\n";
-    cout << act1.get_fd_address() << endl;
-    cout << act1.get_fd_value() << endl << endl;
-
-
-    /* ********** testing acitons functionality ********** */
-
-    actions_t actions = {{"read", 1}, {"write", 1}, {"close", 0}};
-    act1.register_actions(actions);
-    act1.execute_actions();
-
-    // func(act1);
-
-    // actions = {{"read", 1}, {"write", 1}, {"close", 1}};
-    // act1.register_actions(actions);
-    // act1.execute_actions();
-
-    // func(act1);
+    f1.executeActions();
 
     return 0;
 }
