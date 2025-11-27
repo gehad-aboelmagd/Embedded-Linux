@@ -43,7 +43,7 @@ FileActions f2 = f1;
     f2.registerActions(act2);
     f2.executeActions();
 ```
-* Output
+Output
 ```
 closing...
 ```
@@ -51,7 +51,7 @@ closing...
 ```
 f1.executeActions();
 ```
-* Output
+Output
 ```
 Unfortunately, file has already been closed by another object.
 ```
