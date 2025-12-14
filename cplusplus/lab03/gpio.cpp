@@ -12,10 +12,14 @@ namespace MCAL
             write(fd, std::to_string(GPIO_u8Pin).c_str(), 3);
             std::cout << "initialization done successfully\n";
         }
+        else
+        {
+            std::cout << "counldn't open the export file\n";
+        }
     }
     int GPIO::GPIO_setPinDir(int dir)
     {
-        int fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"direction").c_str(), O_RDWR);
+        int fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/direction").c_str(), O_RDWR);
         if(fd >= 0)
         {
             if(0 == dir)
@@ -35,7 +39,7 @@ namespace MCAL
         int fd = -1;
         if(1 == GPIO_u8Dir)
         {
-            fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"value").c_str(), O_RDWR);
+            fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/value").c_str(), O_RDWR);
             if(fd >= 0)
             {
                 write(fd, std::to_string(value).c_str(), 1);
