@@ -28,9 +28,10 @@ Make sure to run the test using sudo; in privilaged state.
 
 ### Outupt 💡
 1. Terminal
+   
+https://github.com/user-attachments/assets/1bff2ba8-f3b4-4e89-9521-818a2488c061
 
-
-2. log.txt
+3. log.txt
 ```
 15:37:26 1.000000
 
