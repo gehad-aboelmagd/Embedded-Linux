@@ -1,5 +1,5 @@
 
-# Temperature Logging Sensor 🌡️
+# Temperature Logging System 🌡️
 
 
 ### Purpose 🤔
