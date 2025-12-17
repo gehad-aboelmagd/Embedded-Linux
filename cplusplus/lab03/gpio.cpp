@@ -10,7 +10,8 @@ namespace MCAL
         if(fd >= 0)
         {
             write(fd, std::to_string(GPIO_u8Pin).c_str(), 3);
-            std::cout << "initialization done successfully\n";
+            close(fd);
+            std::cout << "GPIO initialized successfully\n";
         }
         else
         {
@@ -19,32 +20,52 @@ namespace MCAL
     }
     int GPIO::GPIO_setPinDir(int dir)
     {
-        int fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/direction").c_str(), O_RDWR);
+        int fd = open(("/sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/direction").c_str(), O_RDWR);
         if(fd >= 0)
         {
-            if(0 == dir)
+            if(GPIO_INPUT == dir)
             {
+                GPIO_u8Dir = dir;
                 write(fd, "in", 2);
             }
-            else if(1 == dir)
+            else if(GPIO_OUTPUT == dir)
             {
+                GPIO_u8Dir = dir;
                 write(fd, "out", 3);
             }
+            else
+            {
+                std::cout << "Invalid direction!\n";
+            }
+            close(fd);
             std::cout << "direction set successfully\n";
+        }
+        else
+        {
+            std::cout << "couldn't opne the direction file\n";
         }
         return fd;
     }
     int GPIO::GPIO_setPinValue(int value)
     {
         int fd = -1;
-        if(1 == GPIO_u8Dir)
+        if(GPIO_OUTPUT == GPIO_u8Dir)
         {
-            fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/value").c_str(), O_RDWR);
+            fd = open(("/sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/value").c_str(), O_RDWR);
             if(fd >= 0)
             {
                 write(fd, std::to_string(value).c_str(), 1);
+                close(fd);
                 std::cout << "value set successfully\n";
             }
+            else
+            {
+                std::cout << "couldn't open the value file\n";
+            }
+        }
+        else
+        {
+            std::cout << "Please make sure you are writing to the correct pin\n";
         }
         return fd;
     }
@@ -52,15 +73,24 @@ namespace MCAL
     {
         int fd = -1;
         char buff[2];
-        if(0 == GPIO_u8Dir)
+        if(GPIO_INPUT == GPIO_u8Dir)
         {
-            fd = open(("sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"value").c_str(), O_RDWR);
+            fd = open(("/sys/class/gpio/gpio"+std::to_string(GPIO_u8Pin)+"/value").c_str(), O_RDWR);
             if(fd >= 0)
             {
                 read(fd, buff, sizeof(buff));
                 valueRef = buff[0] - '0';
+                close(fd);
                 std::cout << "value read successfully\n";
             }
+            else
+            {
+                std::cout << "couldn't open the value file\n";
+            }
+        }
+        else
+        {
+            std::cout << "Please make sure you are reading from the correct pin\n";
         }
         return fd;
     }
@@ -70,6 +100,12 @@ namespace MCAL
         if(fd >= 0)
         {
             write(fd, std::to_string(GPIO_u8Pin).c_str(), 3);
+            close(fd);
+            std::cout << "file unexported succcessfully\n";
+        }
+        else
+        {
+            std::cout << "couldn't open the unexport file\n";
         }
     }
 

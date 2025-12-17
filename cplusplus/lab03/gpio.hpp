@@ -6,6 +6,12 @@
 #include <iostream>
 #include <string>
 
+constexpr int GPIO_INPUT  = 0;
+constexpr int GPIO_OUTPUT = 1;
+
+constexpr int GPIO_LOW  = 0;
+constexpr int GPIO_HIGH = 1;
+
 namespace MCAL
 {
     class GPIO
@@ -13,7 +19,6 @@ namespace MCAL
         private:
             int GPIO_u8Pin;
             int GPIO_u8Dir;
-            int GPIO_u8Value;
             static const int GPIO_PIN_SHIFT = 512;
         public:
             GPIO(int pin);
