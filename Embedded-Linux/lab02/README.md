@@ -13,6 +13,8 @@
     1073741824 bytes (1.1 GB, 1.0 GiB) copied, 11.6096 s, 92.5 MB/s
     ```
 
+<img width="676" height="86" alt="Screenshot from 2026-02-13 02-51-46" src="https://github.com/user-attachments/assets/9761eeca-cd13-414f-91d0-4776c1e26b7a" />
+
 2. 
     MBR is an old partitioning system which is capable to handle up to 2T of disk space, with maximum of four primary partitions, often used with ```fdisk``` command.  
     GPT, on the other hand, is the more modern type where it works with modern BIOS and has no limitations regarding disk space or number of partitions, often used for ```gdisk``` command.
@@ -22,6 +24,7 @@
    EXT4  : used for internal drives, supports huge file size and disk size, supports file permissions
 
 4. 
+<img width="1358" height="296" alt="Screenshot from 2026-02-13 03-10-08" src="https://github.com/user-attachments/assets/a3e89399-5124-4ef9-a6d6-694c8449ca84" />
 
 5. loop device is a mechanism to use a regular file as block device(one with a file system)  
     a. command to create a loop device
@@ -55,7 +58,7 @@
     ```
     $sudo losetup -f --partscan --show sd.img 
     ```
-
+    
 9. 
     ```
     $mkfs.vfat -F 16 -n boot /dev/loop19p1 
@@ -86,3 +89,4 @@
 
     $mount /dev/loop19p2 rootfs
     ```
+<img width="1334" height="132" alt="Screenshot from 2026-02-13 09-35-18" src="https://github.com/user-attachments/assets/44198d48-7e3a-498e-bb6e-3df1dbf0e688" />
