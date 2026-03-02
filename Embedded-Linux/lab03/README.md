@@ -163,7 +163,7 @@
     ```
     $ touch script.txt
     $ echo "echo Hello, world" > script.txt
-    $ mkimg -A arm -n "custom command" -d script.txt custom_command.scr
+    $ mkimage -A arm -n "custom command" -d script.txt custom_command.scr
     ```
   then, copy the ```.scr``` file into a virtual device(FAT or EXT4 partitions)
     
