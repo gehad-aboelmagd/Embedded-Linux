@@ -92,7 +92,7 @@
 
     $ make rpi_arm64_defconfig
 
-    $ make CROSS_COMPIEL=aarch64-linux-gnu- -j$(nproc)
+    $ make CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
     ```
 
 7. the file providing the hardware description for u-boot on rasberry-pi is the ```.dtb``` or Device Tree Binary. It is loaded by u-boot and passed to the kernel to decide which underlying hardware is there, hence how to configure it.
