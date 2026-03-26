@@ -1,14 +1,17 @@
 # Lab 6 : Kernel on top of u-boot 🐧
 
-## PART I (VEXPRESS)
+## 1️⃣ PART I (VEXPRESS)
 ### 1. Customizing linux kernel
 ```
 $ git clone https://github.com/torvalds/linux.git
 $ cd linux
+
 $ export ARCH=arm
 $ export CROSS_COMPILE=arm-linux-gnueabi-
+
 $ make vexpress_defconfig
 $ make V=1 zImage dtbs -j$(nproc)
+
 $ ls arch/arm/boot/zImage 
 arch/arm/boot/zImage 
 $ ls arch/arm/boot/dts/arm/vexpress-v2p-ca9.dtb 
@@ -162,3 +165,103 @@ Hello, from init
 ```
 $ arm-linux-gnueabi-gcc init.c -o init.out -static
 ```
+
+## 2️⃣ PART II (Rasberry-Pi)
+### 1. Compiling linux kernel
+```
+$ git clone https://github.com/raspberrypi/linux.git
+$ cd linux
+
+$  ls arch/arm64/configs/ | grep bcm
+$ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
+$ make -j
+
+$ ls arch/arm64/boot/
+dts  Image  Image.gz  install.sh  Makefile
+
+$ ls arch/arm64/boot/dts/broadcom/ | grep bcm2837
+bcm2837-rpi-3-a-plus.dtb
+bcm2837-rpi-3-a-plus.dts
+bcm2837-rpi-3-b.dtb
+bcm2837-rpi-3-b.dts
+bcm2837-rpi-3-b-plus.dtb
+bcm2837-rpi-3-b-plus.dts
+bcm2837-rpi-cm3-io3.dtb
+bcm2837-rpi-cm3-io3.dts
+bcm2837-rpi-zero-2-w.dtb
+bcm2837-rpi-zero-2-w.dts
+```
+
+### 2. Copying files into sd-card
+```
+$ sudo cp arch/arm64/boot/Image ../rpi-img/boot
+$ sudo cp arch/arm64/boot/dts/broadcom/bcm2710-rpi-3-b-plus.dtb ../rpi-img/boot
+```
+### 3. Running image on top of u-boot
+```
+$ qemu-system-aarch64 -M raspi3b -m 1024 -cpu cortex-a53 -kernel u-boot.bin -dtb arch/arm/dts/bcm2837-rpi-3-b-plus.dtb -serial null -serial stdio -monitor null -sd ../rpi-img/sd.img
+
+******************************* gehad@u-boot => setenv bootargs 'console=tty1 console=ttyAMA0,115200 earlyprintk debug'                               
+
+******************************* gehad@u-boot => setenv bbootcmd 'fatload mmc 0:1 $kernel_addr_r Image; fatload mmc 0:1 $fdt_addr_r bcm2710-rpi-3-b-plus.dtb; booti $kernel_addr_r - $fdt_addr_r;'
+
+
+******************************* gehad@u-boot => saveenv
+Saving Environment to FAT... OK
+
+******************************* gehad@u-boot => run bootcmd
+
+```
+<img width="873" height="621" alt="Screenshot from 2026-03-26 01-22-24" src="https://github.com/user-attachments/assets/bacea6a7-0dd8-4300-8f6a-13ba05180b11" />
+
+
+### 4. Resolving 1st panic (rootfs)
+```
+$ qemu-system-aarch64 -M raspi3b -m 1024 -cpu cortex-a53 -kernel u-boot.bin -dtb arch/arm/dts/bcm2837-rpi-3-b-plus.dtb -serial null -serial stdio -monitor null -sd ../rpi-img/sd.img
+
+******************************* gehad@u-boot => setenv bootargs 'console=tty1 console=ttyAMA0,115200 earlyprintk debug root=/dev/mmcblk0p2 rootwait rw'
+
+******************************* gehad@u-boot => saveenv 
+
+******************************* gehad@u-boot => run bootcmd 
+
+```
+<img width="801" height="540" alt="Screenshot from 2026-03-26 01-26-23" src="https://github.com/user-attachments/assets/99d4676e-5b05-4c4f-9743-7e7057261ded" />
+
+
+### 5. Resolving 2nd panic (init process)
+
+Edit the init program, let ```init.c``` file:
+```
+int main()
+{
+        while(1);
+}
+```
+
+Compile using appropriate compiler:
+```
+$ aarch64-linux-gnu-gcc init.c -o init.out -static
+
+$ file init.out 
+init.out: ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked, BuildID[sha1]=0110244c9cc406ad32cb52c1217caad75b09488a, for GNU/Linux 3.7.0, not stripped
+```
+
+Copy to sd-card mounted rootfs partition:
+```
+$ sudo cp init.out ../rpi-img/rootfs
+```
+
+Edit the ```bootargs``` with the new update for initi process:
+```
+$ qemu-system-aarch64 -M raspi3b -m 1024 -cpu cortex-a53 -kernel u-boot.bin -dtb arch/arm/dts/bcm2837-rpi-3-b-plus.dtb -serial null -serial stdio -monitor null -sd ../rpi-img/sd.img 
+
+******************************* gehad@u-boot => setenv bootargs console=tty1 console=ttyAMA0,115200 earlyprintk debug root=/dev/mmcblk0p2 rootwait rw init=init.out
+
+******************************* gehad@u-boot => saveenv
+Saving Environment to FAT... OK
+
+******************************* gehad@u-boot => run bootcmd
+```
+  
+<img width="801" height="540" alt="Screenshot from 2026-03-26 01-56-27" src="https://github.com/user-attachments/assets/f0ed0b1a-ff3c-45f9-bcc6-64462ecc06af" />
