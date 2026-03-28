@@ -265,3 +265,7 @@ Saving Environment to FAT... OK
 ```
   
 <img width="801" height="540" alt="Screenshot from 2026-03-26 01-56-27" src="https://github.com/user-attachments/assets/f0ed0b1a-ff3c-45f9-bcc6-64462ecc06af" />
+
+## 3️⃣ PART III (Physical Rasberry-Pi)
+
+https://github.com/user-attachments/assets/be32607f-ddb0-46e9-85fd-b28c8c490d56
