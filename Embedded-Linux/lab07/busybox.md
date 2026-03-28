@@ -61,3 +61,6 @@ bootcmd=fatload mmc 0:1 $kernel_addr_r Image; fatload mmc 0:1 $fdt_addr_r bcm271
 
 ******************************* gehad@u-boot => run bootcmd 
 ```
+
+#### Demo (qemu)
+https://github.com/user-attachments/assets/34a01444-12b5-45b1-b1d8-ba7ab38206e6
