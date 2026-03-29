@@ -64,3 +64,6 @@ $ qemu-system-aarch64 -M raspi3b -m 1024 -cpu cortex-a53 -kernel u-boot.bin -dtb
 ```
 
 #### Demo
+
+https://github.com/user-attachments/assets/d1cfb532-3236-4a91-ad2f-fb312711152b
+
