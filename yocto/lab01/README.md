@@ -69,3 +69,8 @@ core-image-minimal-raspberrypi3-64.rootfs.wic.bz2
 ```
 sudo bzcat core-image-minimal-raspberrypi3-64.rootfs.wic.bz2 | sudo dd of=/dev/sdb bs=4M status=progress conv=fsync
 ```
+
+
+
+https://github.com/user-attachments/assets/85499c31-27c7-4814-a01f-76c4f1e3cae9
+
